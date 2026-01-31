@@ -18,6 +18,14 @@ const Display = ({text, value}) => {
   )
 }
 
+const StatisticLine = (props) => {
+  return (
+    <div>
+      <Display text={props.text} value={props.value}/>
+    </div>
+  )
+}
+
 const Statistics = ({good, neutral, bad}) => {
   const calcAvg = (props) => {
     const values = Object.values(props) // acqurie values from feedbackCount obj
@@ -34,17 +42,26 @@ const Statistics = ({good, neutral, bad}) => {
     return sum ? (props.good / sum) * 100 : 0 
   }
 
-  return (
-    <div>
-      <Header text="Statistics"/>
-      <Display text="good" value={good}/> 
-      <Display text="neutral" value={neutral}/> 
-      <Display text="bad" value={bad}/> 
-      <Display text="All" value={good + bad + neutral} />
-      <Display text="average" value={calcAvg({good, neutral, bad})}/>
-      <Display text="Percent positive" value={percentPositive({good, neutral, bad})}/>
-    </div>
-  )
+  if (good == 0 && neutral == 0 && bad == 0){
+    return (
+      <div>
+        <Header text="Statistics"/>
+        <p> No feedback given</p>
+      </div>
+    )
+  } else {
+    return (
+      <div>
+        <Header text="Statistics"/>
+        <StatisticLine text="Good:" value={good}/> 
+        <StatisticLine text="Neutral:" value={neutral}/> 
+        <StatisticLine text="Bad:" value={bad}/> 
+        <StatisticLine text="All:" value={good + bad + neutral} />
+        <StatisticLine text="Average:" value={calcAvg({good, neutral, bad})}/>
+        <StatisticLine text="Percent positive:" value={percentPositive({good, neutral, bad})}/>
+      </div>
+    )
+  }
 }
 
 function App() {
