@@ -8,12 +8,22 @@
     {
       "id": "2",
       "name": "zach tucker",
-      "number": "123-987-9878"
+      "number": "123-455-1234"
     },
     {
       "id": "3",
       "name": "mike goob",
-      "number": "123-654-1236"
+      "number": "987-987-7777"
+    },
+    {
+      "id": "2d21",
+      "name": "zach wooten",
+      "number": "123-987-6666"
+    },
+    {
+      "id": "79ef",
+      "name": "Tuck tucker",
+      "number": "789-987-8888"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
