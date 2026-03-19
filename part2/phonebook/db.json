@@ -6,14 +6,14 @@
       "id": "1"
     },
     {
-      "id": 2,
-      "name": "Zach Tucker",
-      "number": "848-484-0101"
+      "id": "2",
+      "name": "zach tucker",
+      "number": "123-987-9878"
     },
     {
-      "id": 3,
-      "name": "Mike Goob",
-      "number": "123-1223-45454"
+      "id": "3",
+      "name": "mike goob",
+      "number": "123-654-1236"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

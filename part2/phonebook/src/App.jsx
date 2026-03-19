@@ -24,15 +24,27 @@ function App() {
     event.preventDefault()
     
     const hasDuplicateName = persons.some(person => person.name.toLowerCase() === newName.toLowerCase());
-    const hasDuplicateNumber = persons.some(person => person.number === newNumber);
+    // const hasDuplicateNumber = persons.some(person => person.number === newNumber);
 
-    if (hasDuplicateName  || hasDuplicateNumber) {
-      alert(`${newName} or ${newNumber} already exists`);
-      return;
+    if (hasDuplicateName) {
+      const replace = confirm(`${newName} already exists, would you like to replace their number`);
+      if (replace) {
+        const curPerson = persons.find(p => p.name.toLowerCase() === newName.toLocaleLowerCase());
+        const curId = curPerson.id;
+        const curName = curPerson.name
+        phoneService
+          .updatePerson(curId, curName, newNumber)
+          .then(updatedPerson => {
+              setPersons(persons.map(p => p.id === updatedPerson.id ? updatedPerson : p))
+              setNewName('')
+              setNewNumber('')
+          })
+          .catch(err => console.log(err))
+        return
+      } else return
     }
 
     const newPerson = {
-      id: persons.length + 1,
       name: newName,
       number: newNumber
     }
