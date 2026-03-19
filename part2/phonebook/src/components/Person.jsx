@@ -1,6 +1,8 @@
-function Person({name, number}) {
+function Person({name, number, deletePerson, id}) {
     return (
-        <p>{name} {number}</p>
+        <>
+        <span>{name} {number} <button onClick={() => deletePerson(id, name)}>Delete Person</button></span>
+        </>
     );
 }
 

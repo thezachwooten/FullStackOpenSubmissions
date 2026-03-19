@@ -3,6 +3,7 @@ import axios from 'axios';
 import PersonForm from './components/PersonForm.jsx';
 import FilterForm from './components/FilterForm.jsx';
 import Persons from './components/Persons.jsx';
+import phoneService from './services/numbers.js'
 
 function App() {
   const [persons, setPersons] = useState([]);
@@ -10,17 +11,14 @@ function App() {
   const [newNumber, setNewNumber] = useState('');
   const [newSearchFilter, setNewSearchFilter] = useState('');
 
-  const hook = () => {
-    console.log('effect');
-    axios
-      .get("http://localhost:3001/persons")
-      .then(res => {
-        console.log("Promise filled")
-        setPersons(res.data)
+  // UseEffect to use phoneService to getAll of perons from db instead of doing the axios calls here. GetAll returns a promise 
+  useEffect(() => {
+    phoneService
+      .getAll()
+      .then(initialNotes => {
+        setPersons(initialNotes)
       })
-  }
-
-  useEffect(hook, []);
+  }, [])
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -34,13 +32,21 @@ function App() {
     }
 
     const newPerson = {
+      id: persons.length + 1,
       name: newName,
       number: newNumber
     }
 
-    setPersons(persons.concat(newPerson));
-    setNewName('');
-    setNewNumber('');
+    // setPersons(persons.concat(newPerson));
+    // setNewName('');
+    // setNewNumber('');
+    phoneService
+      .create(newPerson)
+      .then(returnedPerson => {
+        setPersons(persons.concat(returnedPerson))
+        setNewName('')
+        setNewNumber('')
+      })
   }
 
   const filteredPersons =  persons ? persons.filter(person =>
@@ -59,6 +65,16 @@ function App() {
     setNewSearchFilter(event.target.value);
   }
 
+  const removePerson = (id, name) => {
+    const result = confirm(`Are you sure you want to delete ${name}?`)
+    if (result) {
+      phoneService
+      .deletePerson(id)
+      .then(returnedData => setPersons(persons.filter(n => n.id !== returnedData.id)))
+      .catch(err => alert(err))
+    }
+  }
+
   return (
     <>
       <div>
@@ -66,7 +82,7 @@ function App() {
         <FilterForm className="searchFilter" newSearchFilter={newSearchFilter} handleSearchFilter={handleSearchFilter}/>
         <PersonForm addPerson={addPerson} newName={newName} handlePersonChange={handlePersonChange} newNumber={newNumber} handleNumberChange={handleNumberChange}/>
         <h2>Numbers</h2>
-          <Persons filteredPersons={filteredPersons}/>
+          <Persons filteredPersons={filteredPersons} deletePerson={removePerson}/>
       </div>
     </>
   )
