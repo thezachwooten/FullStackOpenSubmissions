@@ -1,6 +1,6 @@
 import Person from "./Person";
 
-function Persons({filteredPersonsfd}) {
+function Persons({filteredPersons}) {
     return (
         <ul>
             {filteredPersons.map(person =>
