@@ -14,6 +14,7 @@ function App() {
   const [newNumber, setNewNumber] = useState('');
   const [newSearchFilter, setNewSearchFilter] = useState('');
   const [notification, setNotification] = useState(null);
+  const [notificationType, setNotificationType] = useState(null);
 
   // UseEffect to use phoneService to getAll of perons from db instead of doing the axios calls here. GetAll returns a promise 
   useEffect(() => {
@@ -41,6 +42,7 @@ function App() {
           .then(updatedPerson => {
               setPersons(persons.map(p => p.id === updatedPerson.id ? updatedPerson : p))
               setNotification(`${curName} number updated to ${newNumber}`)
+              setNotificationType('success')
               setTimeout(() => {
                 setNotification(null)
               }, 5000)
@@ -65,6 +67,7 @@ function App() {
       .then(returnedPerson => {
         setPersons(persons.concat(returnedPerson))
         setNotification(`${newPerson.name} added with number: ${newPerson.number}`)
+        setNotificationType('success')
         setTimeout(() => {
           setNotification(null)
         }, 5000)
@@ -95,7 +98,14 @@ function App() {
       phoneService
       .deletePerson(id)
       .then(returnedData => setPersons(persons.filter(n => n.id !== returnedData.id)))
-      .catch(err => alert(err))
+      .catch(err => {
+        console.log(err)
+        setNotificationType('error')
+        setNotification(`Information of ${name} cannot be removed at this moment`)
+        setTimeout(() => {
+          setNotification(null)
+        }, 5000)
+      })
     }
   };
 
@@ -103,7 +113,7 @@ function App() {
     <>
       <div>
         <h2>Phonebook</h2>
-        {notification && <Notification message={notification}/>}
+        {notification && <Notification message={notification} type={notificationType}/>}
         <FilterForm className="searchFilter" newSearchFilter={newSearchFilter} handleSearchFilter={handleSearchFilter}/>
         <PersonForm addPerson={addPerson} newName={newName} handlePersonChange={handlePersonChange} newNumber={newNumber} handleNumberChange={handleNumberChange}/>
         <h2>Numbers</h2>

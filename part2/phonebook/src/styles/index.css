@@ -1,8 +1,17 @@
-.notification-div {
+.notification-success {
     background-color: lightgray;
     border: 2px solid;
     border-radius: 5px;
     border-color: green;
     font-size: 2rem;
     color: green;
+}
+
+.notification-error {
+    background-color: lightgray;
+    border: 2px solid;
+    border-radius: 5px;
+    border-color: red;
+    font-size: 2rem;
+    color: red;
 }
