@@ -1,0 +1,16 @@
+{
+  "name": "phonebookbackend",
+  "version": "1.0.0",
+  "description": "Backend for phonebook web service",
+  "license": "ISC",
+  "author": "Zach Wooten",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "start": "node --watch index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
