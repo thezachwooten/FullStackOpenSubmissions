@@ -1,16 +1,16 @@
-function PersonForm({addPerson, newName, handlePersonChange, newNumber, handleNumberChange}) {
+function PersonForm({className, addPerson, newName, handlePersonChange, newNumber, handleNumberChange}) {
 
 
     return (
-        <form onSubmit={addPerson}>
+        <form className={className} onSubmit={addPerson}>
           <div>
-            name: <input value={newName} onChange={handlePersonChange}/>
+            name: <input className={`${className}NameInput`} value={newName} onChange={handlePersonChange}/>
           </div>
           <div>
-            number: <input value={newNumber} onChange={handleNumberChange}/>
+            number: <input className={`${className}NumberInput`} value={newNumber} onChange={handleNumberChange}/>
           </div>
           <div>
-            <button type="submit">add</button>
+            <button className={`${className}SubmitButton`} type="submit">add</button>
           </div>
         </form>
     );

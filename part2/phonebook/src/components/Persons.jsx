@@ -1,8 +1,8 @@
 import Person from "./Person";
 
-function Persons({filteredPersons, deletePerson}) {
+function Persons({className, filteredPersons, deletePerson}) {
     return (
-        <ul>
+        <ul className={className}>
             {filteredPersons.map(person =>
               <li key={person.name}><Person name={person.name} number={person.number} deletePerson={deletePerson} id={person.id}/></li>
             )}

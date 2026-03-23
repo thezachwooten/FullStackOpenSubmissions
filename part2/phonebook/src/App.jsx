@@ -97,7 +97,7 @@ function App() {
     if (result) {
       phoneService
       .deletePerson(id)
-      .then(returnedData => setPersons(persons.filter(n => n.id !== returnedData.id)))
+      .then(returnedData => setPersons(persons.filter(n => n.id !== id)))
       .catch(err => {
         console.log(err)
         setNotificationType('error')
@@ -115,9 +115,9 @@ function App() {
         <h2>Phonebook</h2>
         {notification && <Notification message={notification} type={notificationType}/>}
         <FilterForm className="searchFilter" newSearchFilter={newSearchFilter} handleSearchFilter={handleSearchFilter}/>
-        <PersonForm addPerson={addPerson} newName={newName} handlePersonChange={handlePersonChange} newNumber={newNumber} handleNumberChange={handleNumberChange}/>
+        <PersonForm className="personForm" addPerson={addPerson} newName={newName} handlePersonChange={handlePersonChange} newNumber={newNumber} handleNumberChange={handleNumberChange}/>
         <h2>Numbers</h2>
-          <Persons filteredPersons={filteredPersons} deletePerson={removePerson}/>
+          <Persons className="persons" filteredPersons={filteredPersons} deletePerson={removePerson}/>
       </div>
     </>
   )

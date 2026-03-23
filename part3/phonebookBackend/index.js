@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 let morgan = require('morgan');
+const cors = require('cors');
 
 
 
@@ -38,6 +39,7 @@ app.use(express.json()); // JSON Parser
 // app.use(requestLogger);
 morgan.token('body', function (req, res) { return JSON.stringify(req.body)});
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'));
+app.use(cors());
 
 
 
@@ -52,51 +54,62 @@ app.get('/api/persons', (request, response) => {
 });
 
 app.get('/info', (request, respone) => {
-    const data = {
-        info: `Phonebook has info for ${persons.length}`,
-        timeStamp: `${new Date()}` 
-    };
+  const data = {
+      info: `Phonebook has info for ${persons.length}`,
+      timeStamp: `${new Date()}` 
+  };
 
-    respone.json(data);
+  respone.json(data);
 });
 
 app.get('/api/persons/:id', (request, response) => {
-    const id = request.params.id;
-    const targetPerson = persons.find(n => n.id === id);
+  const id = request.params.id;
+  const targetPerson = persons.find(n => n.id === id);
 
-    if (!targetPerson) response.json({message : `Person with id ${id} not found`});
+  if (!targetPerson) response.json({message : `Person with id ${id} not found`});
 
-    response.json(targetPerson);
+  return response.json(targetPerson);
 });
 
 app.delete('/api/persons/:id', (request, response) => {
-    const id = request.params.id;
-    const targetPerson = persons.find(n => n.id === id);
+  const id = request.params.id;
+  const targetPerson = persons.find(n => n.id === id);
 
-    if (!targetPerson) response.json({message : `Person with id ${id} not found`});
+  if (!targetPerson) return response.json({message : `Person with id ${id} not found`});
 
-    persons = persons.filter(n => n.id != id);
+  persons = persons.filter(n => n.id != id);
 
-    response.json({message: `Person with id ${id} successfully deleted`, ...persons});
+  return response.json({message: `Person with id ${id} successfully deleted`, ...persons});
 });
 
 app.post('/api/persons/', (request, response) => {
-    const newPerson = { ...request.body, id: Math.floor(Math.random() * 10000) }
-    const newName = newPerson.name;
-    const newNumber = newPerson.number;
+  const newPerson = { ...request.body, id: `${Math.floor(Math.random() * 10000)}` }
+  const newName = newPerson.name;
+  const newNumber = newPerson.number;
 
-    if (!newName) return response.status(400).json({error: "name field is missing"});
-    if (!newNumber) return response.status(400).json({error: "number field is missing"});
+  if (!newName) return response.status(400).json({error: "name field is missing"});
+  if (!newNumber) return response.status(400).json({error: "number field is missing"});
 
-    const isDuplicate = persons.some(n => n.name.toLowerCase() === newName.toLowerCase());
+  const isDuplicate = persons.some(n => n.name.toLowerCase() === newName.toLowerCase());
 
-    if (isDuplicate) return response.status(400).json({error: "Duplicate name entered"})
+  if (isDuplicate) return response.status(409).json({error: "Duplicate name entered"})
 
 
-    persons = persons.concat(newPerson);
+  persons = persons.concat(newPerson);
 
-    return response.status(201).json(newPerson);
+  return response.status(201).json(newPerson);
 });
+
+app.put('/api/persons/:id', (request, response) => {
+  const personToUpdate = persons.find(person => person.id === request.params.id);
+
+  if (!personToUpdate) return response.status(404).json({error: `${request.body.name} could not be found`});
+
+  personToUpdate.name = request.body.name;
+  personToUpdate.number = request.body.number;
+
+  return response.json(personToUpdate);
+}); 
 
 // RUN SERVER
 
